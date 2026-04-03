@@ -35,6 +35,8 @@ def get_current_user(
     JS analogy: this is your auth middleware, but instead of calling next(),
     FastAPI injects the return value directly into your route function.
     """
+    # Import here (not at module level) to avoid a circular import:
+    # dependencies.py -> users/models.py -> database.py -> (back to dependencies)
     from app.users.models import User
 
     token = credentials.credentials

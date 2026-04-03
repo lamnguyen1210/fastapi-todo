@@ -1,3 +1,10 @@
+# Alembic handles database schema migrations — the equivalent of git for your DB schema.
+# While database.py defines *what* the schema looks like (via SQLAlchemy models),
+# Alembic generates *SQL scripts* to move the DB from one schema version to the next.
+#
+# To create your first migration (after setting up PostgreSQL):
+#   alembic revision --autogenerate -m "create users and tasks tables"
+#   alembic upgrade head
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
