@@ -90,6 +90,21 @@ def test_cannot_access_another_users_task(auth_client, client):
     assert response.status_code == 404  # 404, not 403 — don't reveal task exists
 
 
+def test_cannot_update_another_users_task(auth_client, client):
+    client, token1, _ = auth_client
+
+    client.post("/auth/register", json={"email": "other@example.com", "password": "password123"})
+    login_resp = client.post("/auth/login", json={"email": "other@example.com", "password": "password123"})
+    token2 = login_resp.json()["access_token"]
+
+    headers1 = {"Authorization": f"Bearer {token1}"}
+    created = client.post("/tasks", json={"title": "Private task"}, headers=headers1).json()
+
+    headers2 = {"Authorization": f"Bearer {token2}"}
+    response = client.put(f"/tasks/{created['id']}", json={"title": "Hijacked"}, headers=headers2)
+    assert response.status_code == 404  # 404, not 403 — don't reveal task exists
+
+
 def test_cannot_delete_another_users_task(auth_client, client):
     client, token1, _ = auth_client
 
