@@ -17,7 +17,7 @@ class TaskUpdate(BaseModel):
 class TaskResponse(BaseModel):
     id: int
     title: str
-    description: Optional[str]
+    description: Optional[str] = None
     is_done: bool
     created_at: datetime
     owner_id: int

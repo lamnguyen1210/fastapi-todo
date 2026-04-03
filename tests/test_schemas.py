@@ -31,3 +31,17 @@ def test_token_response_default_type():
     from app.auth.schemas import TokenResponse
     token = TokenResponse(access_token="abc123")
     assert token.token_type == "bearer"
+
+
+def test_user_response_from_attributes():
+    from app.users.schemas import UserResponse
+    from datetime import datetime, timezone
+
+    class FakeUser:
+        id = 1
+        email = "a@b.com"
+        created_at = datetime(2026, 1, 1, tzinfo=timezone.utc)
+
+    schema = UserResponse.model_validate(FakeUser())
+    assert schema.id == 1
+    assert schema.email == "a@b.com"
